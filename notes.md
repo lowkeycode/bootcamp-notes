@@ -495,5 +495,51 @@ for (let item in clothing) {
 }
 ```
 
+## Git Collaboration
+
+Create a feature branch
+
+git checkout -b feature
+
+Then add changes, and add, commit then push to feature branch name
+
+On git hub in that repo you get "Compare & pull request"
+Click that to open a new pull request
+
+If after making multiple pushes to the feature branch, click the pull requests tab at the top and click new pull requests and pick the proper branch to merge into main
+
+Then on the open pull request page double check at the top left what branch you are merging which branch into. Rarely need to change this but good to double check.
+
+Then click merge pull request
+
+Then you can click the files changed tab to review code and the review changes button there is where one would approve, request changes or comment on the pull request.
+
+Then click merge pull request and confirm. Then you can delete the branch on github to clean up (click on the branches drop down and click view all branches and click the garbage can beside the branch to delete)
+
+Then we git checkout main and git pull to get the updates down from github.
+
+git pull origin main
+
+Then clean up the feature branch on local if you'd like (Not neccessary but may cause clutter if not deleting unused branches)
+
+git branch -d branch name
+
+
+## Git Conflicts
+
+Check the notes, This part of the lesson didn't work properly and moved very fast.
+
+## Github Organizations
+
+Click plus sign at top right of github to create an organization and go through the steps.
+
+Then git clone the url of the repo in that organization
+
+git clone https://github.com/cameronremesz/testy.git
+
+
+## Array Methods - Code Along
+
+Namespacing is also helpful in 2 ways. First, if we use the init method then all the previous code is parsed and defined in the global execution context then called once. This gives a small performance boost. Second, it also makes debugging easier as you will have the separation of an error being thrown while parsing (when we define it) or in execution AFTER calling the init method.
 
 
