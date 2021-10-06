@@ -1190,3 +1190,63 @@ const PhotoForm = ({ getPhotos }) => {
 
 export default PhotoForm;
 ```
+
+## Project Management
+
+1. Design
+2. Develop
+3. Analyze
+4. Evaluate
+
+### Design
+
+- Gather project requirements
+- Discuss schedules, strengths & weaknesses
+- Define roles and responsibilities
+- Define MVP & stratch goals
+- Create the plan
+
+
+Project requirements:
+
+- Discuss client brief (What are you building? Make sure everyone is on the same page. Some people get different takeaways from client briefs)
+- Who is your audience/user? What must it do? What are the stretch goals? Does everyone understand the Deliverables
+
+Understanding your team:
+
+- Hash out coinciding schedules
+- Discuss strengths/weaknesses & room for growth
+
+Define roles & responsibilities:
+
+- Define how decisions will be made as a group
+
+Define MVP & stretch goals:
+
+ - Self explanatory
+
+ Creating the plan:
+
+ - Consider project management tool like asana, jira or trello to track and keep a pulse on the project
+ - Discuss touch points/standups (when you'll meet up)
+
+### Develop
+
+Communication: 
+
+- Commit to touch points & communication streams & keep to them 
+- Documents decisions
+
+Conflict resolution:
+
+- People thinking different things and not being able to resolve things immediately
+- This is good. Discuss feelings and then agree on a solution and then commit.
+
+
+### Analyze
+
+
+### Evaluate
+- Retrospective meetings (What went well? What didn't? What to do differently? )
+
+
