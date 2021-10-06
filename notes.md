@@ -355,17 +355,17 @@ git status
 
 git push origin main
 
-Deleteing:
+Deleting:
 
 The branch still exists after merging so we should clean it up if no longer needed. Keep in mind that the branches exist bot on our machine in git AND on github, so we need to delete both.
 
 Make sure you ARE NOT in the branch your going to delete.
 
 Delete github branch
-git push origin :adding-content
+git push origin :branch-name
 
 Delete local git branch
-git branch -d adding-content
+git branch -d branch-name
 
 ## Github Pages From Command Line
 
@@ -386,28 +386,25 @@ git merge gh-pages
 git push origin main
 
 ## Unzip From Command line
+
 unzip filename.zip -d directoryToUnzipInto
 
 Without the -d flag it with unzip in current working directory
-
 
 ## Javascript
 
 ## Truthy / Falsey
 
-null	: falsy
+null : falsy
 undefined : falsy
-any string :	truthy
-an empty string :	falsy
-the number 0 :	falsy
-any number higher or lower than 0 :	truthy
-
+any string : truthy
+an empty string : falsy
+the number 0 : falsy
+any number higher or lower than 0 : truthy
 
 ## Functions
 
-
 - Functions are FIRST CLASS CITIZENS which means they are just values
-
 
 Function Declartion:
 
@@ -415,7 +412,7 @@ Function Declartion:
 
 ```js
 function helloWorld() {
-  console.log('Hello World')
+  console.log("Hello World");
 }
 ```
 
@@ -426,11 +423,10 @@ Function Expression:
 - Not hoisted
 
 ```js
-const helloWorld = function() {
-  console.log('Hello World')
-}
+const helloWorld = function () {
+  console.log("Hello World");
+};
 ```
-
 
 ## Objects
 
@@ -446,31 +442,26 @@ const clothing = {
   tshirts: {
     sml: 3,
     med: 4,
-    lrg: 10
-  }
-}
+    lrg: 10,
+  },
+};
 
-clothing.socks
+clothing.socks;
 // 34
 
-
-clothing["shoes"]
+clothing["shoes"];
 //  2
 
-
-const userChoice = prompt('What item do you want to know about?');
+const userChoice = prompt("What item do you want to know about?");
 //  The user picks shoes, so now we have the string "shoes"
 
-
-clothing[userChoice]
+clothing[userChoice];
 // 2
-
 ```
 
 Dot notation is easiest and easiest to remember. However it cannot use variables to access objects. Ex.) clothing.userChoice will NOT work
 
 Bracket notation has good use cases though is harder to remember. The value inside the brackets need to be in a string or a variable that contains a string matching the property name.
-
 
 Both can access nested levels.
 
@@ -487,8 +478,8 @@ To loop over objects you can use a for in loop
 const clothing = {
   socks: 34,
   shoes: 2,
-  pants: 3
-}
+  pants: 3,
+};
 
 for (let item in clothing) {
   console.log(`I have ${clothing[item]} ${item}`);
@@ -522,8 +513,14 @@ git pull origin main
 
 Then clean up the feature branch on local if you'd like (Not neccessary but may cause clutter if not deleting unused branches)
 
-git branch -d branch name
+Delete github branch
+git push origin :branch-name
 
+Go to main branch
+git checkout main
+
+Delete local git branch
+git branch -d branch-name
 
 ## Git Conflicts
 
@@ -537,9 +534,659 @@ Then git clone the url of the repo in that organization
 
 git clone https://github.com/cameronremesz/testy.git
 
-
 ## Array Methods - Code Along
 
 Namespacing is also helpful in 2 ways. First, if we use the init method then all the previous code is parsed and defined in the global execution context then called once. This gives a small performance boost. Second, it also makes debugging easier as you will have the separation of an error being thrown while parsing (when we define it) or in execution AFTER calling the init method.
 
+## APIs
 
+We can elgantly add search params by using the URL & URLSearchParams constructors, passing the URL our api url and the search params an object of search params then calling fetch with the endpointUrl variable.
+
+```js
+const endpointUrl = new URL("https://www.septastats.com/api");
+
+endpontUrl.search = new URLSearchParams({
+  ml: "salad",
+});
+
+fetch(endPointUrl)
+  .then((response) => {
+    return res.json();
+  })
+  .then((data) => {
+    console.log(data.data);
+  });
+```
+
+## Promises
+
+```js
+const request = fetch("https://restcountries.eu/rest/v2/name/canada");
+console.log(request);
+// Promise {<pending>}
+```
+
+Here we log the response and we get a Promise (Pending)
+
+Promises can be fulfilled or rejected but the act as a place holder object until the data comes back. It holds place for a future value that we know will be returned whether it comes back with our data or for whatever reason encounters an error Ex.) The server holding our data is down.
+
+This allows our code to keep running while the fetch happens.
+
+Whats the big advantage?
+They allow the ability to chain asynchronous operations.
+
+Lifecycle:
+
+Promises can be in different states.
+
+In the beginning it is pending.
+Then when it has finished it is settled.
+Settled promises can be fulfilled or rejected.
+
+fetch() returns a Promise.
+
+On ALL Promises we can call the then method.
+
+```js
+const request = fetch("https://restcountries.eu/rest/v2/name/canada");
+console.log(request);
+
+const getCountryData = function (country) {
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`).then();
+};
+```
+
+The .then() method gets a callback that is executed as soon as the Promise is settled.
+
+This function receives one argument which is the resulting value of the settled Promise - usually called response (response)
+
+```js
+const getCountryData = function (country) {
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`).then(function (
+    response
+  ) {
+    console.log(response);
+    // Response
+  });
+};
+
+getCountryData("canada");
+```
+
+The data we want though is now in the body of the Response. To parse this data we need to call .json() on the Response which will parse the data out of the body for us.
+
+```js
+const getCountryData = function (country) {
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then(function (response) {
+      console.log(response);
+      response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      // Our API data shows up here
+    });
+};
+
+getCountryData("canada");
+```
+
+To error handle we use a .catch() method to catch any errors that may be thrown in the chain.
+
+```js
+const getCountryData = function (country) {
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then(function (response) {
+      console.log(response);
+      response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      // Our API data shows up here
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+
+getCountryData("canada");
+```
+
+<!-- ! This is additional -->
+
+The json() function is also an async function so it also returns a Promise. So we need to return the response.json() so we can handle the second Promise with a second .then() method which gives us a callback that handles the resolved value of response.json() which is our data.
+
+With arrow functions this is simplified because if with a one liner you can automatically return the values in the callbacks.
+
+```js
+const getCountryData = function (country) {
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then((response) => response.json())
+    .then((data) => console.log(data));
+};
+
+getCountryData("canada");
+```
+
+Handling Promise errors:
+
+These are rejected promises. Errors propogate down the chain so even when using multiple fetch methods if any error is thrown in ANY of the fetch methods we can catch that error at the end with a .catch() method. (Again receives a callback that we can use to define what we do on error. Inside this call back is where you would call a function we define to display an error message). This error is an object so we can access the message instead of rendering the error object.
+
+```js
+const getCountryData = function (country) {
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((err) => console.log(err.message));
+};
+
+getCountryData("canada");
+```
+
+If we call the getCountryData() method with a property the server still checks for that value and even though it doesn't find it it is a fulfilled promises with a status of 404 and ok set to false
+
+```js
+const getCountryData = function (country) {
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((err) => console.log(err.message));
+};
+
+getCountryData("adfsgsdfgsd");
+```
+
+We have to reject this ourseleves manually by throwing our own error in the first then() callback. We define out own message to throw. When we throw our own error the Promise IMMEDIATELY rejects and we can then use in the .catch() method. This allows us to write customer error messages using the response status which is more user friendly.
+
+```js
+const getCountryData = function (country) {
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Country not found! ${response.status}`);
+      }
+
+      return response.json();
+    })
+    .then((data) => console.log(data))
+    .catch((err) => console.log(err.message));
+};
+
+getCountryData("adfsgsdfgsd");
+```
+
+In our fetch function (either async or promised based with .then()), we can just return the data after it's parsed from the .json() method.
+
+Anything returned from an async function IS A PROMISE. So below we'd expect the returnedData to be our resolved api object but its actually a promise.
+
+```js
+const getPokemon = async function (url) {
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    console.log(data);
+    //  Object
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const returnedData = getPokemon("https://pokeapi.co/api/v2/pokemon/1");
+console.log(returnedData);
+//  Promise <pending>
+```
+
+## Error Handling
+
+In our .then() method we want to deal with any errors that may happen so we can a .catch() method and manually throw the error and then catch it in the .catch()
+
+```js
+const pokemonURL = "https://pokeapi.co/api/v2/pokemon/1123456789/";
+
+fetch(pokemonURL)
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      console.log("Im fired");
+      throw new Error("Custom error message");
+    }
+  })
+  .then((jsonData) => {
+    console.log(jsonData);
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
+```
+
+## this Keyword
+
+Why?
+
+Because the developers who wrote javascript needed to be able to write the methods like .push(). When they were writing the method on the Array object they had to have a way of saying what exactly to appended the pushed value to. Alas, this.
+
+## Firebase
+
+1. Setup project on firebase.
+2. Add realtime db
+3. Add setup snippets and script tags from firebase
+4. Initialize db
+5. Create reference to db
+6. CRUDL db with set update and on
+
+## Modules
+
+Fun fact: ESModules don't work without a live server, you will get a CORS error. Never ran into it before because I've always had live-server
+
+Check your notes on named/default imports/exports
+
+## React
+
+- JSX can only return one element, no siblings
+- JSX html elements are just values so we can store them in variables
+- Inside the return statement we cannot use if statements because they are statements and do not evaluate to anything. We need to use an expression. Like a ternary operator. This is similar to template literals in JS.
+
+SASS with React:
+
+- npm install node-sass
+- if errors follow trouble shooting steps in command line
+
+## Components
+
+- When we are looping over things we need to make sure we return something so .map is used instead of .forEach
+
+- When returning (Ex.) inside a map function), to get a multi line return you need to use () after the return. One liners don't need it. return()
+
+```js
+function App() {
+  console.log(animals);
+
+  return (
+    <div className="App">
+      <h1>Manimals</h1>
+
+      {animals.map((animal) => {
+        return (
+          <div className="pet">
+            <h2>{animal.name}</h2>
+            <p>Type: {animal.type}</p>
+            <p>Size: {animal.size}</p>
+            <img src={animal.picture} alt={`An adorable ${animal.type}`} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+```
+
+.map() returns an array but JSX treats arrays in a different way so returning one is completely valid. JSX sees an list of JSX elements and will render them. This is how react is by design, it wants us to map over arrays.
+
+React keeps track of every single element in the DOM. So in our arrays (lists) it wants us to number them with a KEY so react can find it really quickly
+
+It may be intuitive to use the index when looping over to use as the key. But this is incorrect and if the list size changes the keys may change for any given elements
+
+Most apis or databases will provide a universal unique id UUID, or we can use an npm package to create these for us. We should use those in professional projects, in practice apps without any of these then we can just use the index because YOLO.
+
+```js
+animals.map((animal, i) => {
+  return (
+    <div className="pet" key={i}>
+      <h2>{animal.name}</h2>
+      <p>Type: {animal.type}</p>
+      <p>Size: {animal.size}</p>
+      <img src={animal.picture} alt={`An adorable ${animal.type}`} />
+    </div>
+  );
+});
+```
+
+We can put our map in its own component making sure we import the animals data for it to use and then we can reuse this component anywhere in our app
+
+```js
+import animals from "./animals";
+
+const PetList = () => {
+  return (
+    <div>
+      {animals.map((animal, i) => {
+        return (
+          <div className="pet" key={i}>
+            <h2>{animal.name}</h2>
+            <p>Type: {animal.type}</p>
+            <p>Size: {animal.size}</p>
+            <img src={animal.picture} alt={`An adorable ${animal.type}`} />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+export default PetList;
+```
+
+## Events
+
+With events in react we just put the event listener directly on the element we are defining and can write our callback then just pass it into the react event attribute (Ex.) onClick)
+
+```js
+function App() {
+  const handleClick = () => {
+    console.log("clicked");
+  };
+
+  return (
+    <div className="App">
+      <h1>Events</h1>
+      <button onClick={handleClick}>Make clicks, not war</button>
+    </div>
+  );
+}
+```
+
+- Side note - We can write statements in JSX. just not in the return statement in jsx. Above the return statement you CAN write regular js like control flow etc.
+
+## Props
+
+We can pass props (properties) to our components and then access the props object from inside th component by destructuring or saying props.whateverPropIWannaAccess
+
+The key prop is specifically only used by react and is used for providing each rendered component with a unique ID
+
+We also have access to children props if we pass jsx elements or even another component inside a component
+
+```js
+import FanInfo from "./FanInfo";
+import "./App.css";
+
+function App() {
+  //  Data from an API call or db
+  const listOfTeams = [
+    "Toronto Ancient Birbs",
+    "Los Angeles Tankers",
+    "Miami Warmths",
+    "Edmonton Dinosaur Juice",
+  ];
+
+  const followTeam = () => {
+    console.log("Following Team");
+  };
+
+  return (
+    <div className="App">
+      <h1>Sports</h1>
+
+      {listOfTeams.map((team, i) => (
+        <FanInfo teamName={team} key={i} subscribe={followTeam}>
+          <h3>Writing inside a component</h3>
+          <p>Lorem ipsum dolor sit amet.</p>
+        </FanInfo>
+      ))}
+    </div>
+  );
+}
+
+export default App;
+```
+
+```js
+const FanInfo = ({ teamName, subscribe, children }) => {
+  console.log(children);
+  return (
+    <div>
+      <h2>Welcome to the arena of the {teamName}</h2>
+      <button onClick={() => subscribe(teamName)}>Tell Me More!</button>
+      {children}
+    </div>
+  );
+};
+
+export default FanInfo;
+```
+
+## State
+
+```js
+let [counter, setCounter] = useState(0);
+
+const handleClick = () => {
+  setCounter(counter++);
+  console.log(counter);
+};
+```
+
+This will not work because we are not actually updating our state but rather reassigning the variable of counter which cause some whacky ass behaviour. Some shorthand JS syntax in react can fuck shit up.
+
+## useEffect
+
+useEffect mimics the functionality of componentDidMount, componentWillUnmount etc. A component renders on page load and any time it changes state.
+
+```js
+import { useState, useEffect } from "react";
+
+import "./App.css";
+
+function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("Cameron Remesz");
+
+  useEffect(() => {
+    console.log("mounted");
+  }, [loggedIn]);
+
+  return (
+    <div>
+      <h1>Welcome to the fuckin' party</h1>
+      <button onClick={() => setLoggedIn(!loggedIn)}>
+        {loggedIn ? "Log out" : "Log in"}
+      </button>
+
+      {loggedIn ? (
+        <p>Time to party, {userName}</p>
+      ) : (
+        <p>Please log in so you can party</p>
+      )}
+
+      <button onClick={() => setUserName(userName + "☠️")}>
+        Add ☠️ to User name
+      </button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+useEffect takes a callback function to run when state changes and a second argument of an array of pieces of state to track and run the callback on render. This lets us target only specific components
+
+Conditional rendering listening to a specific piece of state with useEffect
+
+```js
+useEffect(() => {
+  loggedIn ? setUserName("Cameron Remesz") : setUserName("");
+}, [loggedIn]);
+```
+
+To get a component to only run once on mount you pass it an empty array.
+
+```js
+useEffect(() => {
+  fetch(`https://8ball.delegator.com/magic/JSON/Am I going to be rich?`)
+    .then((res) => res.json())
+    .then((data) => setEightBall(data.magic.answer));
+}, []);
+```
+
+If you leave a useEffect with no array and no conditional it will create an infinite loop as useEffect by default listens to any render of any piece of state
+
+There are instances when you want to use useEffect without the dependencies array but they are edge casey => google if needed
+
+For unmounting there are instances we want to do something. For example a subscription to a data base and when we log out we need to turn off that subscription otherwise data is still flowing and going nowhere. This is called a memory leak.
+
+We mimic a componentWillUnmount with passing a returned function with whatever we want to do on unmount
+
+```js
+import { useEffect } from "react";
+
+const VipRoom = () => {
+  useEffect(() => {
+    console.log("connected to firebase with .on()");
+
+    return () => console.log("component unmounted");
+  }, []);
+
+  return (
+    <div>
+      <h2>Hello</h2>
+      <p>Welcome to the VIP room</p>
+    </div>
+  );
+};
+
+export default VipRoom;
+```
+
+## Deploying React With Netlify
+
+Using variables that are not used later in the code will cause Netlify to fail on build but will give you a stack trace from its terminal when you click on that specific deploy.
+
+## Note On Forms
+
+For setting the default value of a drop down (or some other inputs) we use a set state setting it to the value of our place holder (whatever we choose to name it) Then set the select value to that so it shows our disabled value first prompting the user to pick one then all our options get their corresponding value property. Remember all form inputs need a value property for react to keep track of them properly.
+
+```js
+import { useState } from "react";
+
+const PhotoForm = () => {
+  const [userChoice, setUserChoice] = useState("placeholder");
+
+  return (
+    <form>
+      <h2>Show me some photos that are:</h2>
+      <select name="photoOrientation" id="photoOrientation" value={userChoice}>
+        <option value="placeholder" disabled>
+          Pick One
+        </option>
+        <option value="square">Square</option>
+        <option value="portrait">Portrait</option>
+        <option value="landscape">Landscape</option>
+      </select>
+      <button type="submit">Give me the photos!!!</button>
+    </form>
+  );
+};
+
+export default PhotoForm;
+```
+
+## Updating State From A Child
+
+If we need to access parent state from a child we define a function on the parent utilizing the updating state method somewhere inside and accepting a parameter that will be passed in once executed in the child component.
+
+```js
+// App.js
+import axios from "axios";
+import { useState, useEffect } from "react";
+
+import DisplayPhotos from "./DisplayPhotos";
+import PhotoForm from "./PhotoForm";
+
+import "./App.css";
+
+function App() {
+  const [allPhotos, setAllPhotos] = useState([]);
+  const [filteredPhotos, setFilteredPhotos] = useState([]);
+
+  useEffect(() => {
+    axios({
+      url: "https://api.unsplash.com/search/photos",
+      method: "GET",
+      dataResponse: "json",
+      params: {
+        client_id: "KVIMQR520-tf2c7YpYmdKZDQd-jvgDSXVvQfNpS2n9c",
+        query: "puppies",
+        per_page: 30,
+      },
+    }).then((res) => {
+      const poopyPics = res.data.results;
+      const withOrientation = poopyPics.map((photo) => {
+        const ratio = photo.width / photo.height;
+
+        let orientation = "square";
+
+        if (ratio < 0.75) {
+          orientation = "portrait";
+        } else if (ratio > 1.35) {
+          orientation = "landscape";
+        }
+
+        return { ...photo, orientation: orientation };
+      });
+      setAllPhotos(withOrientation);
+    });
+  }, []);
+
+  const getPhotos = (e, userChoice) => {
+    e.preventDefault();
+    const copyOfAllPhotos = [...allPhotos];
+    console.log(copyOfAllPhotos);
+
+    const photosByOrientation = copyOfAllPhotos.filter((photo) => {
+      return photo.orientation === userChoice;
+    });
+
+    setFilteredPhotos(photosByOrientation);
+  };
+
+  return (
+    <div className="App">
+      <h1>Show me the poopies!</h1>
+      <PhotoForm getPhotos={getPhotos} />
+      <DisplayPhotos photos={filteredPhotos} />
+    </div>
+  );
+}
+
+export default App;
+```
+
+```js
+// PhotoForm.js
+import { useState } from "react";
+
+const PhotoForm = ({ getPhotos }) => {
+  const [userChoice, setUserChoice] = useState("placeholder");
+
+  const handleUserChoice = (e) => {
+    setUserChoice(e.target.value);
+  };
+
+  return (
+    <form
+      onSubmit={(e) => {
+        getPhotos(e, userChoice);
+      }}
+    >
+      <h2>Show me some photos that are:</h2>
+      <select
+        name="photoOrientation"
+        id="photoOrientation"
+        value={userChoice}
+        onChange={handleUserChoice}
+      >
+        <option value="placeholder" disabled>
+          Pick One
+        </option>
+        <option value="square">Square</option>
+        <option value="portrait">Portrait</option>
+        <option value="landscape">Landscape</option>
+      </select>
+      <button type="submit">Give me the photos!!!</button>
+    </form>
+  );
+};
+
+export default PhotoForm;
+```
