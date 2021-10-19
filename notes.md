@@ -1206,7 +1206,6 @@ export default PhotoForm;
 - Define MVP & stratch goals
 - Create the plan
 
-
 Project requirements:
 
 - Discuss client brief (What are you building? Make sure everyone is on the same page. Some people get different takeaways from client briefs)
@@ -1223,18 +1222,18 @@ Define roles & responsibilities:
 
 Define MVP & stretch goals:
 
- - Self explanatory
+- Self explanatory
 
- Creating the plan:
+Creating the plan:
 
- - Consider project management tool like asana, jira or trello to track and keep a pulse on the project
- - Discuss touch points/standups (when you'll meet up)
+- Consider project management tool like asana, jira or trello to track and keep a pulse on the project
+- Discuss touch points/standups (when you'll meet up)
 
 ### Develop
 
-Communication: 
+Communication:
 
-- Commit to touch points & communication streams & keep to them 
+- Commit to touch points & communication streams & keep to them
 - Documents decisions
 
 Conflict resolution:
@@ -1242,11 +1241,167 @@ Conflict resolution:
 - People thinking different things and not being able to resolve things immediately
 - This is good. Discuss feelings and then agree on a solution and then commit.
 
-
 ### Analyze
 
-
 ### Evaluate
+
 - Retrospective meetings (What went well? What didn't? What to do differently? )
 
+## Routing
+
+
+Routes are components used for conditional rendering
+
+
+We wrap our Router around our whole app component then we can use routes inside it.
+
+```js
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
+import Catalogue from "./Catalogue";
+
+function App() {
+  return (
+    <Router>
+      <div className="wrapper">
+        <header>
+          <h1>Hark Flarks</h1>
+        </header>
+
+        <Route exact path="/">
+          <Catalogue />
+        </Route>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+
+```
+The below throws a warning because useEffect is pissed off that the movieId variable that we use in the url isn't inside of the useEffect so it can't keep track on it and what its value is on each render. So we put it inside the dependency array. This is ok because when the movieId is initially set when the component mounts it will cause a render on mount just as before with an empty array.
+
+We know that the value destructured into movieId won't change, but we need to hold useEffects hand and point it at that value so it doesn't get it's wires crossed.
+
+
+```js
+import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const MovieDetails = () => {
+
+  const { movieId } = useParams();
+
+  const [movie, setMovie] = useState({});
+
+  useEffect(() => {
+    axios({
+      url: `https://api.themoviedb.org/3/movie/${movieId}`,
+      params: {
+        api_key: 'fe2050bd37a28bdbe4179a065be4bb54'
+      }
+
+    })
+    .then(res => {
+      console.log(res.data)
+      setMovie(res.data);
+    })
+  }, [])
+
+  return (
+    <h2>Deets</h2>
+  )
+}
+
+export default MovieDetails
+```
+
+We resolve this by passing the movieId into useEffect
+
+```js
+const MovieDetails = () => {
+
+  const { movieId } = useParams();
+
+  const [movie, setMovie] = useState({});
+
+  useEffect(() => {
+    axios({
+      url: `https://api.themoviedb.org/3/movie/${movieId}`,
+      params: {
+        api_key: 'fe2050bd37a28bdbe4179a065be4bb54'
+      }
+
+    })
+    .then(res => {
+      console.log(res.data)
+      setMovie(res.data);
+    })
+  }, [movieId])
+
+  return (
+    <h2>Deets</h2>
+  )
+}
+```
+
+
+
+The Link tag sets the url so then when the url bar is updated the Movie details component is rendered in the /movie:movieId route which we steal off useParams and use that id to make the second request
+
+```js
+import { useState, useEffect } from "react";
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+
+const Catalogue = () => {
+
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    axios({
+      url: 'https://api.themoviedb.org/3/discover/movie',
+      params: {
+        api_key: 'fe2050bd37a28bdbe4179a065be4bb54',
+        language: 'en-US',
+        sort_by: 'popularity.desc',
+        include_adult: 'false',
+        include_video: 'false',
+        page: 1,
+        primary_release_year: 1999,
+      },
+    })
+    .then(res => {
+      setMovies(res.data.results);
+    });
+  }, [])
+
+  return (
+    <ul className="catalogue">
+      {
+        movies.map(movie => {
+          return (
+            <li key={movie.id}>
+              <Link to={`/movie/${movie.id}`}>
+                <img 
+                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                alt={`Poster for ${movie.original_title}`} 
+                />
+              </Link>
+            </li>
+          )
+        })
+      }
+    </ul>
+  )
+}
+
+export default Catalogue
+
+```
+
+## Custom Hooks
+
+Custom hooks are used as more of a part of the iterative refactoring process when there is lots of code. Try not to use too early on or the code can become convoluted and harder to even read.
 
