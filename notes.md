@@ -1405,3 +1405,33 @@ export default Catalogue
 
 Custom hooks are used as more of a part of the iterative refactoring process when there is lots of code. Try not to use too early on or the code can become convoluted and harder to even read.
 
+## Tech Challenges
+
+Tech challenge prep:
+
+Adrian
+
+Cover basics:
+- loops how they work, which solution is best
+- Use code wars to stay sharp
+- Relax, slow things down, think things through before talking and deliver like normal conversation (casually), tell them what your thinking
+- In thank you email ask for feedback at that point (can be hit and miss if you'll get any back)
+
+
+Safi
+- Focus on basics and what you know really well so you have confidence when speaking about them
+- Interviewers will push until you get on a topic you don't know and to get you to talk about things you don't know
+- How will you approach being asked something you don't know (being honest and saying that you don't know about it yet) "This is outside of the realm of the web development that I’ve learned about up until now."
+- Are you someone they'd wanna work with? Be yourself and talk about it as yourself and don't come across as a robot
+- Ask for clarification or ask for time to think about it if you need it
+- Ask questions for clarification (this shows trying to get a deeper understanding of the question at hand)
+- The goal of tech interviews is not to get every question right but rather your relationship to code and the people who work with the team
+- If a company seems sketchy post about it in Juno slack and it will be quickly crowd source detected as a fraud or not
+- Write down questions your asked in interviews and share with the discord
+- MAKE SURE YOU KNOW WHAT YOU KNOW REALLY WELL
+
+
+Zeinab
+- Don't keep adding things when your talking, have your talking points organized and concise, answering the question at hand
+
+
